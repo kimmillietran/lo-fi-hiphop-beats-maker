@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>lo-fi beats maker</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Passion+One&display=swap" rel="stylesheet">    <link rel="stylesheet" href="styles/index.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+
+    <!-- Bootstrap CSS local fallback -->
+    <script>
+        let test = document.createElement("div");
+        test.className = "hidden d-none";
+
+        document.head.appendChild(test);
+        let cssLoaded = window.getComputedStyle(test).display === "none";
+        document.head.removeChild(test);
+
+        if (!cssLoaded) {
+            let link = document.createElement("link");
+
+            link.type = "text/css";
+            link.rel = "stylesheet";
+            link.href = "lib/bootstrap.min.css";
+
+            document.head.appendChild(link);
+        }
+    </script>
+    <!-- jQuery local fallback -->
+    <script>!window.jQuery && document.write('<script src="lib/jquery-3.4.1.min.js"><\/script>')</script>
+</head>
+<body>
+    <nav class="navbar navbar-dark">
+        <a class="navbar-brand" href="#">Lo-Fi Beats Maker</a>
+    </nav>
+
+    <div class="container">
+        <div id="grid">
+            <div class="row">
+                <div class="col text-center">Beats</div>
+                <div class="col text-center">Melodies</div>
+                <div class="col text-center">Ambiance</div>
+            </div>
+
+            <div class="row">
+                <button id="beat1" class="col-sm beats btn">
+                </button>
+
+                <button id="melody1" class="col-sm btn">
+                </button>
+
+                <button id="rain" class="col-sm btn">
+                </button>
+            </div>
+
+            <div class="row">
+                <button id="beat2" class="col-sm beats btn">
+                </button>
+
+                <button id="melody2" class="col-sm btn">
+                </button>
+
+                <button id="fire" class="col-sm btn">
+                </button>
+            </div>
+
+            <div class="row">
+                <button id="beat3" class="col-sm beats btn">
+                </button>
+
+                <button id="melody3" class="col-sm btn">
+                </button>
+
+                <button id="waves" class="col-sm btn">
+                </button>
+            </div>
+        </div>
+        <div id="sounds">
+            <div class="row justify-content-center">Sounds</div>
+
+            <div class="row">
+                <button id="waterdrop" class="col-sm btn"></button>
+                <button id="ding" class="col-sm btn"></button>
+                <button id="laugh" class="col-sm btn"></button>
+                <button id="bubbles" class="col-sm btn"></button>
+            </div>
+
+            <div class="row">
+                <div class="col-sm">1</div>
+                <div class="col-sm">2</div>
+                <div class="col-sm">3</div>
+                <div class="col-sm">4</div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="scripts/index.js"></script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+body {
+    text-transform: lowercase;
+    font-family: "Passion One", cursive !important;
+    font-size: 2rem !important;
+    color: white !important;
+    background-image: url("../images/bg.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top;
+}
+
+button {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: ghostwhite !important;
+}
+
+.navbar {
+    padding: 0 1rem !important;
+    background-color: #9d0b1c;
+}
+.navbar-brand {
+    font-size: 1.5rem !important;
+}
+
+.beats {
+    background-image: url("../images/drum.png");
+    background-size: 60px;
+}
+
+#grid {
+    width: 450px;
+    margin: 40px auto;
+}
+
+#sounds {
+    width: 600px;
+    margin: auto;
+    padding: 0;
+}
+
+#grid button {
+    height: 100px;
+    margin: 1%;
+    background-size: 60px;
+    border-radius: 0.7rem !important;
+}
+
+#sounds button {
+    height: 70px;
+    margin: 2% 5% 1% 5%;
+    background-size: 40px;
+    border-radius: 6rem;
+}
+
+#sounds .row div {
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+#melody1 {
+    background-image: url("../images/ukulele.png");
+    background-size: 75px !important;
+}
+
+#melody2 {
+    background-image: url("../images/piano.png");
+    background-size: 45px !important;
+}
+
+#melody3 {
+    background-image: url("../images/electric-guitar.png");
+}
+
+#rain {
+    background-image: url("../images/rain.png");
+}
+
+#waves {
+    background-image: url("../images/wave.png");
+}
+
+#fire {
+    background-image: url("../images/bonfire.png");
+}
+
+#waterdrop {
+    background-image: url("../images/water.png");
+}
+
+#ding {
+    background-image: url("../images/bell.png");
+}
+
+#laugh {
+    background-image: url("../images/animegirl.png");
+    background-size: 55px !important;
+}
+
+#bubbles {
+    background-image: url("../images/bubbles.png");
+}
