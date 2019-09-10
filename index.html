@@ -36,66 +36,79 @@
         <a class="navbar-brand" href="#">Lo-Fi Beats Maker</a>
     </nav>
 
-    <div class="container">
-        <div id="grid">
-            <div class="row">
-                <div class="col text-center">Beats</div>
-                <div class="col text-center">Melodies</div>
-                <div class="col text-center">Ambiance</div>
+    <div class="container-fluid">
+        <div class="row">
+            <div id="left-container" class="col-6">
+                <div id="grid" class="row justify-content-center">
+                    <div id="beats" class="col-3 text-center">
+                        <div class="row"><div class="col">Beats</div></div>
+                        <div class="row"><button id="beat1"class ="col btn"></button></div>
+                        <div class="row"><button id="beat2" class="col btn"></button></div>
+                        <div class="row"><button id="beat3" class="col btn"></button></div>
+                    </div>
+
+                    <div class="col-3 text-center">
+                        <div class="row"><div class="col">Melodies</div></div>
+                        <div class="row"><button id="melody1" class="col btn"></button></div>
+                        <div class="row"><button id="melody2" class="col btn"></button></div>
+                        <div class="row"><button id="melody3" class="col btn"></button></div>
+                    </div>
+
+                    <div class="col-3 text-center">
+                        <div class="row"><div class="col">Ambiance</div></div>
+                        <div class="row"><button id="rain" class="col btn"></button></div>
+                        <div class="row"><button id="fire" class="col btn"></button></div>
+                        <div class="row"><button id="waves" class="col btn"></button></div>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center"><button id="reset" class="col-2 btn text-center">reset</button></div>
+
+                <div id="sfx" class="row justify-content-center">
+                    <div class="col-8">
+                        <div class="row"><div class="col text-center">Sounds</div></div>
+                        <div class="row">
+                            <div class="col-3">
+                                <div class="row"><button id="waterdrop" class="col btn"></button></div>
+                                <div class="row"><div class="col">1</div></div>
+                            </div>
+                            <div class="col-3">
+                                <div class="row"><button id="ding" class="col btn"></button></div>
+                                <div class="row"><div class="col">2</div></div>
+                            </div>
+                            <div class="col-3">
+                                <div class="row"><button id="laugh" class="col btn"></button></div>
+                                <div class="row"><div class="col">3</div></div>
+                            </div>
+                            <div class="col-3">
+                                <div class="row"><button id="bubbles" class="col btn"></button></div>
+                                <div class="row"><div class="col">4</div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="row">
-                <button id="beat1" class="col-sm beats btn">
-                </button>
-
-                <button id="melody1" class="col-sm btn">
-                </button>
-
-                <button id="rain" class="col-sm btn">
-                </button>
-            </div>
-
-            <div class="row">
-                <button id="beat2" class="col-sm beats btn">
-                </button>
-
-                <button id="melody2" class="col-sm btn">
-                </button>
-
-                <button id="fire" class="col-sm btn">
-                </button>
-            </div>
-
-            <div class="row">
-                <button id="beat3" class="col-sm beats btn">
-                </button>
-
-                <button id="melody3" class="col-sm btn">
-                </button>
-
-                <button id="waves" class="col-sm btn">
-                </button>
+            <div id="right-container" class="col-6">
+                <div class="row justify-content-center">
+                    <div id="text-block" class="col-8 text-center">
+                        Create your own lo-fi hip hop beats by choosing
+                        a combination of drums beats, melodies, ambiance,
+                        and sound effects. Use the tools below to record
+                        and save your own versions!
+                    </div>
+                </div>
+                <div id="recording" class="row justify-content-center">
+                    <div class="col-3">
+                        <div class="row"><div class="col text-center">Recording</div></div>
+                        <div class="row justify-content-center">
+                            <button id="rec" class="col-5 btn"></button>
+                            <button id="save" class="col-5 btn"></button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div id="sounds">
-            <div class="row justify-content-center">Sounds</div>
-
-            <div class="row">
-                <button id="waterdrop" class="col-sm btn"></button>
-                <button id="ding" class="col-sm btn"></button>
-                <button id="laugh" class="col-sm btn"></button>
-                <button id="bubbles" class="col-sm btn"></button>
-            </div>
-
-            <div class="row">
-                <div class="col-sm">1</div>
-                <div class="col-sm">2</div>
-                <div class="col-sm">3</div>
-                <div class="col-sm">4</div>
-            </div>
-        </div>
-    </div>
-
     <script type="text/javascript" src="scripts/index.js"></script>
 </body>
 </html>
