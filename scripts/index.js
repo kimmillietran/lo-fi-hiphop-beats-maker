@@ -1,137 +1,144 @@
-var gridSounds = {
-    "beat1": "./sounds/beats/beat1.mp3",
-    "beat2": "./sounds/beats/beat2.mp3",
-    "beat3": "./sounds/beats/beat3.mp3",
-    "melody1": "./sounds/melodies/melody1.mp3",
-    "melody2": "./sounds/melodies/melody2.mp3",
-    "melody3": "./sounds/melodies/melody3.mp3",
-    "rain": "./sounds/ambiance/rain.mp3",
-    "waves": "./sounds/ambiance/waves.mp3",
-    "fire": "./sounds/ambiance/fire.mp3"
+const audioContext = new AudioContext();
+
+const gridFiles = {
+    "beat1": "./sounds/beats/beat1.mp3", "beat2": "./sounds/beats/beat2.mp3",
+    "beat3": "./sounds/beats/beat3.mp3", "melody1": "./sounds/melodies/melody1.mp3",
+    "melody2": "./sounds/melodies/melody2.mp3", "melody3": "./sounds/melodies/melody3.mp3",
+    "rain": "./sounds/ambiance/rain.mp3", "waves": "./sounds/ambiance/waves.mp3", "fire": "./sounds/ambiance/fire.mp3"
+}
+
+const keyPresses = {49: "waterdrop", 50: "ding", 51: "laugh", 52: "bubbles"};
+
+
+let soundToBuffer = {};
+
+let sfxBuffer = {
+    "waterdrop": "./sounds/effects/waterdrop.mp3", "ding": "./sounds/effects/ding.mp3",
+    "laugh": "./sounds/effects/laugh.mp3", "bubbles": "./sounds/effects/bubbles.mp3"
 };
 
-var soundEffects = {
-    "waterdrop": "./sounds/effects/waterdrop.mp3",
-    "ding": "./sounds/effects/ding.mp3",
-    "laugh": "./sounds/effects/laugh.mp3",
-    "bubbles": "./sounds/effects/bubbles.mp3",
+let globalObj = this;
+let currBeat, currBeatID = null;
+let currMelody, currMelodyID = null;
+let currAmbiance, currAmbianceID = null;
+
+const loopedAudio = [['currBeat', 'currBeatID'], ['currMelody', 'currMelodyID'], ['currAmbiance', 'currAmbianceID']];
+
+init();
+
+async function init() {
+    await loadSamples();
+    initGrid();
+    initReset();
+    initSFX();
 }
 
-var keyPresses = {49: "waterdrop", 50: "ding", 51: "laugh", 52: "bubbles"};
-
-var currBeat = new Audio();
-var currMelody = new Audio();
-var currAmbiance = new Audio();
-var currSound = new Audio();
-var loopedAudio = [currBeat, currMelody, currAmbiance];
-
-setAudioLoop();
-setUpGrid();
-setUpReset();
-setUpSoundEffects();
-
-function setAudioLoop()
-{
-    for (let key in loopedAudio) {
-        loopedAudio[key].loop = true;
+function playSample(sample, isSound=true) {
+    const sampleSource = audioContext.createBufferSource();
+    if (isSound) {
+        sampleSource.buffer = soundToBuffer[sample];
+        sampleSource.loop = true;
     }
-}
-
-function displayMessageIfFailed(promise)
-{
-    if (promise !== undefined) {
-        promise.then(function() {
-            //everything worked out
-        }).catch(function(error) {
-            alert("This sound clip could not played.");
-        })
+    else {
+        sampleSource.buffer = sfxBuffer[sample];
     }
+    sampleSource.connect(audioContext.destination);
+    sampleSource.start();
+    return sampleSource;
 }
 
-function setUpGrid()
-{
-    for (let clipName in gridSounds) setUpClip(clipName);
+async function loadSamples() {
+    console.log("Loading samples...");
+    for (let sound in gridFiles) {
+        soundToBuffer[sound] = await getFile(audioContext, gridFiles[sound]);
+    }
+
+    for (let sound in sfxBuffer) {
+        sfxBuffer[sound] = await getFile(audioContext, sfxBuffer[sound]);
+    }
+    console.log("Samples loaded.");
 }
 
-function setUpClip(clipName)
-{
-    $('#' + clipName).click(function() {
-        let changingPart;
-        let isAmbiance;
+async function getFile(audioContext, filepath) {
+    const response = await fetch(filepath);
+    const arrayBuffer = await response.arrayBuffer();
+    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+    return audioBuffer;
+}
 
-        if (clipName.includes("beat")) changingPart = currBeat;
-        else if (clipName.includes("melody")) changingPart = currMelody;
-        else {
-            changingPart = currAmbiance;
-            isAmbiance = true;
+function initGrid() {
+    for (let sound in soundToBuffer) initSound(sound);
+    console.log("Grid initialized.");
+}
+
+function initSound(sound) {
+    $('#' + sound).click(function() {
+
+        if (sound.includes("beat")) {
+            start($(this), 'currBeat', 'currBeatID', sound);
         }
-
-        if (changingPart.src == "") {
-            changingPart.src = gridSounds[clipName];
-            if (!isAmbiance) {
-                currBeat.currentTime = 0;
-                currMelody.currentTime = 0;
-            }
-            let promise =  changingPart.play();
-            $(this).addClass("selected");
-            displayMessageIfFailed(promise);
+        else if (sound.includes("melody")) {
+            start($(this), 'currMelody', 'currMelodyID', sound);
         }
         else {
-            changingPart.pause();
-            let currID = parseSourceForID(changingPart.src);
-            $('#' + currID).removeClass("selected");
-
-            if (changingPart.src.includes(clipName)) {
-                changingPart.removeAttribute("src");
-            }
-            else {
-                changingPart.src = gridSounds[clipName];
-                if (!isAmbiance) {
-                    currBeat.currentTime = 0;
-                    currMelody.currentTime = 0;
-                }
-                let promise =  changingPart.play();
-                $(this).addClass("selected");
-                displayMessageIfFailed(promise);
-            }
+            start($(this), 'currAmbiance', 'currAmbianceID', sound,true);
         }
     });
 }
 
-function setUpReset() {
+function start(button, currPart, currID, sound, isAmbiance=false) {
+    let part = globalObj[currPart];
+    let id = globalObj[currID];
+
+    if (part != null) { //if something is already chosen for that part
+        $('#' + id).removeClass("selected"); //revert current square color to normal
+        part.stop();
+
+        if (id === sound) { //if user re-clicked current square
+            globalObj[currPart], globalObj[currID] = null; //reset currPart and currID
+            return;
+        }
+    }
+
+    globalObj[currPart] = playSample(sound);
+    globalObj[currID] = sound;
+    let beat = globalObj['currBeat'];
+    let melody = globalObj['currMelody'];
+
+    if (!isAmbiance && beat != null && melody != null) { //reset beat and melody times so they are synced
+        beat.stop();
+        melody.stop();
+        globalObj['currBeat'] = playSample(globalObj['currBeatID']);
+        globalObj['currMelody'] = playSample(globalObj['currMelodyID']);
+    }
+    button.addClass("selected");
+}
+
+function initReset() {
     $('#reset').click(function() {
         for (let key in loopedAudio) {
-            let part = loopedAudio[key];
-            if (part.src !== "") {
-                let currID = parseSourceForID(part.src);
-                $('#' + currID).removeClass("selected");
-                part.removeAttribute("src");
-                part.pause();
+            let buffer = globalObj[loopedAudio[key][0]];
+            let id = globalObj[loopedAudio[key][1]];
+
+            if (buffer !== undefined) {
+                $('#' + id).removeClass("selected");
+                buffer.stop();
+                buffer, id = null;
             }
         }
     });
 }
 
-function setUpSoundEffects()
-{
-    let promise;
-    for (let clip in soundEffects) {
-        $('#' + clip).on('click', function() {
-                currSound.src = soundEffects[clip];
-                promise = currSound.play();
-                displayMessageIfFailed(promise);
+function initSFX() {
+    for (let sfx in sfxBuffer) {
+        $('#' + sfx).on('click', function() {
+            playSample(sfx, false);
         })
     }
 
     $(document).on('keypress', function(e) {
         if (e.which in keyPresses) {
             $("#" + keyPresses[e.which]).trigger("click");
-
         }
     })
-}
-
-function parseSourceForID(audio) {
-    let filename = audio.split('\\').pop().split('/').pop();
-    return filename.slice(0,-4);
 }
