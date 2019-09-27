@@ -1,28 +1,33 @@
 const audioContext = new AudioContext();
+const destination = audioContext.createMediaStreamDestination();
 
 const gridFiles = {
-    "beat1": "./sounds/beats/beat1.mp3", "beat2": "./sounds/beats/beat2.mp3",
-    "beat3": "./sounds/beats/beat3.mp3", "melody1": "./sounds/melodies/melody1.mp3",
-    "melody2": "./sounds/melodies/melody2.mp3", "melody3": "./sounds/melodies/melody3.mp3",
-    "rain": "./sounds/ambiance/rain.mp3", "waves": "./sounds/ambiance/waves.mp3", "fire": "./sounds/ambiance/fire.mp3"
+    "beat1": "./sounds/beats/beat1.wav", "beat2": "./sounds/beats/beat2.wav",
+    "beat3": "./sounds/beats/beat3.wav", "melody1": "./sounds/melodies/melody1.wav",
+    "melody2": "./sounds/melodies/melody2.wav", "melody3": "./sounds/melodies/melody3.wav",
+    "rain": "./sounds/ambiance/rain.wav", "waves": "./sounds/ambiance/waves.wav",
+    "fire": "./sounds/ambiance/fire.wav"
 }
 
 const keyPresses = {49: "waterdrop", 50: "ding", 51: "laugh", 52: "bubbles"};
 
 
-let soundToBuffer = {};
+var soundToBuffer = {};
 
-let sfxBuffer = {
+var sfxBuffer = {
     "waterdrop": "./sounds/effects/waterdrop.mp3", "ding": "./sounds/effects/ding.mp3",
     "laugh": "./sounds/effects/laugh.mp3", "bubbles": "./sounds/effects/bubbles.mp3"
 };
 
-let globalObj = this;
-let currBeat, currBeatID = null;
-let currMelody, currMelodyID = null;
-let currAmbiance, currAmbianceID = null;
+var global = this;
+var currBeat, currBeatID = null;
+var currMelody, currMelodyID = null;
+var currAmbiance, currAmbianceID = null;
+var recording = false;
+var recorder;
 
-const loopedAudio = [['currBeat', 'currBeatID'], ['currMelody', 'currMelodyID'], ['currAmbiance', 'currAmbianceID']];
+const loopedAudio = [['currBeat', 'currBeatID'], ['currMelody', 'currMelodyID'],
+                    ['currAmbiance', 'currAmbianceID']];
 
 init();
 
@@ -31,6 +36,8 @@ async function init() {
     initGrid();
     initReset();
     initSFX();
+    initRecord();
+    initSave();
 }
 
 function playSample(sample, isSound=true) {
@@ -42,6 +49,7 @@ function playSample(sample, isSound=true) {
     else {
         sampleSource.buffer = sfxBuffer[sample];
     }
+    sampleSource.connect(destination);
     sampleSource.connect(audioContext.destination);
     sampleSource.start();
     return sampleSource;
@@ -87,45 +95,46 @@ function initSound(sound) {
 }
 
 function start(button, currPart, currID, sound, isAmbiance=false) {
-    let part = globalObj[currPart];
-    let id = globalObj[currID];
+    let part = global[currPart];
+    let id = global[currID];
 
     if (part != null) { //if something is already chosen for that part
         $('#' + id).removeClass("selected"); //revert current square color to normal
         part.stop();
 
         if (id === sound) { //if user re-clicked current square
-            globalObj[currPart], globalObj[currID] = null; //reset currPart and currID
+            global[currPart] = null;
+            global[currID] = null; //reset currPart and currID
             return;
         }
     }
 
-    globalObj[currPart] = playSample(sound);
-    globalObj[currID] = sound;
-    let beat = globalObj['currBeat'];
-    let melody = globalObj['currMelody'];
+    global[currPart] = playSample(sound);
+    global[currID] = sound;
 
-    if (!isAmbiance && beat != null && melody != null) { //reset beat and melody times so they are synced
-        beat.stop();
-        melody.stop();
-        globalObj['currBeat'] = playSample(globalObj['currBeatID']);
-        globalObj['currMelody'] = playSample(globalObj['currMelodyID']);
+    if (!isAmbiance && currBeat != null && currMelody != null) {
+        //reset beat and melody times so they are synced
+        currBeat.stop();
+        currMelody.stop();
+        currBeat = playSample(currBeatID);
+        currMelody = playSample(currMelodyID);
     }
     button.addClass("selected");
 }
 
 function initReset() {
     $('#reset').click(function() {
-        for (let key in loopedAudio) {
-            let buffer = globalObj[loopedAudio[key][0]];
-            let id = globalObj[loopedAudio[key][1]];
+        loopedAudio.forEach(function(pair, index) {
+            let bufferName = pair[0];
+            let idName = pair[1];
 
-            if (buffer !== undefined) {
-                $('#' + id).removeClass("selected");
-                buffer.stop();
-                buffer, id = null;
+            if (!(global[bufferName] == null)) {
+                $('#' + global[idName]).removeClass("selected");
+                global[bufferName].stop();
+                global[bufferName] = null;
+                global[idName] = null;
             }
-        }
+        });
     });
 }
 
@@ -141,4 +150,37 @@ function initSFX() {
             $("#" + keyPresses[e.which]).trigger("click");
         }
     })
+}
+
+function exportFile(blob) {
+    let blobUrl = window.webkitURL.createObjectURL(blob);
+    $('#link').attr('href', blobUrl);
+    recorder.clear();
+}
+
+function initRecord() {
+    $('#rec').click(function() {
+        $(this).toggleClass("recording");
+        if (recording) {
+            console.log("Recording stopped...");
+            recorder.stop();
+            $('#reset').trigger('click');
+            recorder.exportWAV(exportFile);
+            recording = false;
+        }
+        else {
+            let source = audioContext.createMediaStreamSource(destination.stream);
+            recorder = new Recorder(source);
+            recorder.record();
+            recording = true;
+            console.log("Recording started...");
+        }
+    });
+}
+
+function initSave() {
+    $('#save').click(function() {
+        console.log("Download requested...");
+        document.getElementById('link').click();
+    });
 }

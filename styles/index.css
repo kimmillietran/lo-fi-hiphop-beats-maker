@@ -1,7 +1,7 @@
 body {
     text-transform: lowercase;
     font-family: "Passion One", cursive !important;
-    font-size: 2rem !important;
+    font-size: 2vw !important;
     color: white !important;
     background-color: sienna !important;
     background-repeat: no-repeat;
@@ -18,11 +18,11 @@ body {
 }
 
 #grid {
-    padding: 3% 15% 0%;
+    padding: 3% 15% 0;
 }
 
 #sfx {
-    padding-top: 8%;
+    padding-top: 10vh;
 }
 
 #sfx .col-3 div:nth-of-type(2){
@@ -31,12 +31,12 @@ body {
 }
 
 #text-block {
-    font-size: 1.7rem;
-    padding-top: 15%;
+    font-size: 2vw ;
+    padding-top: 15vh;
 }
 
 #recording {
-    padding-top: 10%;
+    padding-top: 15vh;
 }
 
 /* Buttons */
@@ -124,6 +124,10 @@ button {
 }
 
 /* Recording Buttons */
+.recording {
+    background-image: url(../images/stop.png) !important;
+}
+
 #recording button {
     height: 60px;
     border-radius: 6rem;
