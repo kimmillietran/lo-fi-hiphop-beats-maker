@@ -31,7 +31,7 @@
 </head>
 <body>
     <nav class="navbar navbar-dark">
-        <a class="navbar-brand" href="#">Lo-Fi Beats Maker</a>
+        <a class="navbar-brand" href="#">Lo-Fi Hip hop Beats Maker</a>
     </nav>
 
     <div class="container-fluid">
@@ -129,9 +129,21 @@
                         </div>
                     </div>
                 </div>
+
+                <div id="recording-left" class="row justify-content-center d-lg-none">
+                    <div class="col-3">
+                        <div class="row">
+                            <div class="col text-center">Recording</div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <button id="rec-left" class="col-5 btn"></button>
+                            <button id="save-left" class="col-5 btn"></button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div id="right-container" class="col-6">
+            <div id="right-container" class="col-6 d-none d-lg-block">
                 <div class="row justify-content-center">
                     <div id="text-block" class="col-8 text-center">
                         Create your own lo-fi hip hop beats by choosing
@@ -140,14 +152,14 @@
                         and save your own versions!
                     </div>
                 </div>
-                <div id="recording" class="row justify-content-center">
+                <div id="recording-right" class="row justify-content-center">
                     <div class="col-3">
                         <div class="row">
                             <div class="col text-center">Recording</div>
                         </div>
                         <div class="row justify-content-center">
-                            <button id="rec" class="col-5 btn"></button>
-                            <button id="save" class="col-5 btn"></button>
+                            <button id="rec-right" class="col-5 btn"></button>
+                            <button id="save-right" class="col-5 btn"></button>
                         </div>
                         <a id="link" download="recording.wav"></a>
                     </div>

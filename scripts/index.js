@@ -38,6 +38,7 @@ async function init() {
     initSFX();
     initRecord();
     initSave();
+    handleResize();
 }
 
 function playSample(sample, isSound=true) {
@@ -159,7 +160,7 @@ function exportFile(blob) {
 }
 
 function initRecord() {
-    $('#rec').click(function() {
+    $('#rec-right, #rec-left').click(function() {
         $(this).toggleClass("recording");
         if (recording) {
             console.log("Recording stopped...");
@@ -179,8 +180,25 @@ function initRecord() {
 }
 
 function initSave() {
-    $('#save').click(function() {
+    $('#save-right, #save-left').click(function() {
         console.log("Download requested...");
         document.getElementById('link').click();
+    });
+}
+
+function handleResize() {
+    $(window).on('resize', function() {
+        var win = $(this);
+        if (win.width() < 992) {
+
+            $('#right-container').removeClass('col-6');
+            $('#left-container').removeClass('col-6');
+            $('#left-container').addClass('col-12');
+
+        } else {
+            $('#left-container').removeClass('col-12');
+            $('#left-container').addClass('col-6');
+            $('#right-container').addClass('col-6');
+        }
     });
 }
