@@ -15,8 +15,8 @@ const keyPresses = {49: "waterdrop", 50: "ding", 51: "laugh", 52: "bubbles"};
 var soundToBuffer = {};
 
 var sfxBuffer = {
-    "waterdrop": "./sounds/effects/waterdrop.mp3", "ding": "./sounds/effects/ding.mp3",
-    "laugh": "./sounds/effects/laugh.mp3", "bubbles": "./sounds/effects/bubbles.mp3"
+    "waterdrop": "./sounds/effects/waterdrop.wav", "ding": "./sounds/effects/ding.wav",
+    "laugh": "./sounds/effects/laugh.wav", "bubbles": "./sounds/effects/bubbles.wav"
 };
 
 var global = this;
