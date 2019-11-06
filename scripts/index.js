@@ -58,6 +58,7 @@ function playSample(sample, isSound=true) {
 
 async function loadSamples() {
     console.log("Loading samples...");
+    $('#reset').text('loading...');
     for (let sound in gridFiles) {
         soundToBuffer[sound] = await getFile(audioContext, gridFiles[sound]);
     }
@@ -66,6 +67,7 @@ async function loadSamples() {
         sfxBuffer[sound] = await getFile(audioContext, sfxBuffer[sound]);
     }
     console.log("Samples loaded.");
+    $('#reset').text('reset');
 }
 
 async function getFile(audioContext, filepath) {
